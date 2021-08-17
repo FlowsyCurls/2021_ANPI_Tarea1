@@ -6,7 +6,7 @@
 int main()
 {
 
-    double res = power_t(2, 2);
+    double res = root_t(5, -5);
     printf("%f \n", res);
 
 }

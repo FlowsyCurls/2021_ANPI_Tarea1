@@ -33,7 +33,32 @@ long long factorial(int x)
 
 
 
-// -------------------------- exponencial base e ---------------------------------
+// --------------------------- funcion x^-1 -----------------------------------------
+
+
+double div_ta(double x)
+{
+
+    long double x0 =  2.220446049*pow(10, -16);
+    printf("%d \n", x0);
+    x0 = pow(x0, 2);
+
+
+    double x1 = x0*(2 - x*x0);
+
+    while( abs(((x1 - x0)/x1)) < tol)
+    {
+
+        x1 = x1*(2 - x*x1);
+    }
+
+    return x1;
+}
+
+
+
+
+// -------------------------- exponencial base e -------------------------------------
 
 double exp_t(double x)
 {
@@ -67,7 +92,7 @@ double exp_t(double x)
 
 
 
-//------------------------------- funcion seno(x) ------------------------------------
+//------------------------------- funcion sin(x) ------------------------------------
 
 double sin_t(double x)
 {
@@ -208,6 +233,8 @@ double ln_t(double x)
 
 
 
+
+
 //------------------------------- funcion log(x) ------------------------------------
 
 double log_t(int x, int a)
@@ -244,23 +271,6 @@ double log_t(int x, int a)
 
 
 
-//------------------------------- funcion asin(x) ------------------------------------
-
-double asin_t(double x)
-{
-    /**
-    * aproximacion de la funcion  utilizado la base dada por el usuario. Se reescribe 
-    * la expresion en terminos de logaritmo natual para utilizar la funcion anteriormente 
-    * implementada. 
-    * 
-    * Paramatros de entrada 
-    *          - a : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
-    * 
-    */
-    return 1./sin_t(x);
-}
-
-
 
 //------------------------------- funcion exponencial base a ------------------------------------
 
@@ -283,6 +293,129 @@ double power_t(double x, double a)
     return exp;
  
 }
+
+
+
+
+//------------------------------- funcion asin(x) -------------------------------------------
+
+double asin_t(double x)
+{
+    /**
+    * aproximacion de la funcion  utilizado la base dada por el usuario. Se reescribe 
+    * la expresion en terminos de logaritmo natual para utilizar la funcion anteriormente 
+    * implementada. 
+    * 
+    * Paramatros de entrada 
+    *          - a : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
+    * 
+    */
+    return 1./sin_t(x);
+}
+
+
+
+
+//--------------------------- funcion raiz indice a ---------------------------------------
+
+
+double f(double x, int p, int a)
+{
+
+    /**
+    * Funcion utilizada para aproximar una raiz con indice p.  
+    * 
+    * El criterio de la funcion es :
+    *                                      x^p - a 
+    *
+    * donde
+    *            p es el indice de la raiz 
+    *            a es el argumento de la raiz
+    *
+    */
+    return pow(x, p) - a;
+
+}
+
+double derivate_f(double x, int p)
+{
+
+    /**
+    * Derivada de la funcion utilizada para aproximar una raiz con indice p.  
+    * 
+    * El criterio de la derivada de la funcion es :
+    *                                                   p*x^(p-1) 
+    *
+    * donde
+    *            p es el indice de la raiz 
+    *            a es el argumento de la raiz
+    *
+    */
+    return p* pow(x, p -1) ;
+
+}
+
+double root_t(int x, int a)
+{
+
+    /**
+    * aproximacion de la funcion raiz con un indice dada por el usuario. Se utiliza el metodo 
+    * metodo Newton-Rapshon para aproximar el cero de la funcion g(x) = x^p - a
+    * 
+    * Paramatros de entrada 
+    *          - x : argumento de la funcion raiz, debe estrictamente mayor que cero 
+    *          - a : indice de la funcion raiz
+    * 
+    */
+
+    if (x < 0) //Se valida el dominio de la funcion 
+    {
+        printf("El argumento de la raiz debe ser mayor o igual que cero");
+        return NULL;
+    }
+    if (a <= 0) //Se valida el indice raiz se encuentre dentro de los valores esperados
+    {
+        printf("El indice debe ser mayor que cero");
+        return NULL
+    }
+
+
+    double error = tol + 1;
+    int k = 1;
+    double xk = x/2.; //Se asigna el valor inicial 
+
+    while(error > tol && k < iterMax) //Se verifica el punto parada
+    {
+
+
+        double n = f(xk, a, x); //Se calcula el numerador de la fraccion que forma para del calculo del nuevo xk segun el metodo Newton-Rapshon, se evalua la funcion en xk
+        double d = derivate_f(xk, a); //Se calcula el denomiador de la fraccion que forma para del calculo del nuevo xk segun el metodo Newton-Rapshon, se evalua la derivada funcion en xk
+        double x0 = xk; //Se asigna el nuevo valor para el xk anterior
+        xk = xk - n/d; //Se calcula el nuevo valor de xk
+        error = abs((xk - x0) / xk); //Se calcula el error 
+        k++;
+
+    }
+
+    return xk;
+
+}
+
+
+
+
+//----------------------------- funcion raiz cuadrada --------------------------------------
+
+
+double sqrt_t(int x)
+{
+
+    return root_t(x, 2);
+    
+}
+
+
+
 
 
 //------------------------------- aproximacion de pi ------------------------------------
