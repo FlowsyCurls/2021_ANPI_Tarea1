@@ -10,24 +10,46 @@ double tol = 0.00000001;
 int iterMax = 5000;
 
 
-long long factorial(int x)
+/**
+* Implementacion de la funcion factorial
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion. Numero del factorial que se desea calcular 
+* 
+* Parametros de salida:
+*          - res : resultado final. 
+*
+*/
+double factorial(int x)
 {
+    
     int temp = 1; 
-    long long res = 1;
+    double res = 1.;
 
-    if (x == 0)
+    if (x < 0) //En caso de que el argumento sea menor que cero, no existe un factorial 
     {
-        return 1; 
+        std::cout << "Argumento invalido para calcular el factorial"
     }
 
-    while(temp <= x)
+    else if (x == 0) //Verfica que el caso especial de factorial de 0, retorna 1
     {
-        res = res * temp;
-        temp++;
+        return 1;
+    }
+
+    else {
+
+        //Calculo del factorial
+         for(int i = 1; i <= x; ++i) 
+        {
+            res *= i; 
+        }
+
+        return res; 
+
+
 
     }
 
-    return res;
 
 }
 
@@ -35,22 +57,58 @@ long long factorial(int x)
 
 // --------------------------- funcion x^-1 -----------------------------------------
 
-
-double div_ta(double x)
+double div_ta(double a)
 {
+    double eps = 2.2204E-16;
+    double x0;
 
-    long double x0 =  2.220446049*pow(10, -16);
-    printf("%d \n", x0);
-    x0 = pow(x0, 2);
+    double fac0 = 1;
+    double fac20 = factorial(20);
+    double fac40 = factorial(40);
+    double fac60 = factorial(60);
+    double fac80 = factorial(80);
+    double fac100 = factorial(100);
 
 
-    double x1 = x0*(2 - x*x0);
-
-    while( abs(((x1 - x0)/x1)) < tol)
+    if (fac0 < a <= fac20)
     {
-
-        x1 = x1*(2 - x*x1);
+        x0 = pow(eps, 2);
+        std::cout << x0 << '\n';
     }
+
+    if (fac20 < a <= fac40)
+    {
+        x0 = pow(eps, 4);
+    }
+
+    if (fac40 < a <= fac60)
+    {
+        x0 = pow(eps, 8);
+    }
+
+    if (fac60 < a <= fac80)
+    {
+        x0  = pow(eps, 11);
+    }
+
+    if (fac80 < a <= fac80)
+    {
+        x0 = pow(eps, 15);
+    }
+
+
+    double x1, error = tol + 1;
+    int k = 0; 
+
+ 
+    while(error > tol && k <= iterMax){
+        x1 = x0*(2-a*x0); 
+        error = abs((x1 - x0)/x1); 
+        x0 = x1;
+        k++; 
+    }
+
+
 
     return x1;
 }
@@ -58,32 +116,35 @@ double div_ta(double x)
 
 
 
+
 // -------------------------- exponencial base e -------------------------------------
+
+
+/**
+* Aproximacion de la funciones exponencial de base e 
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion cos
+* 
+* Parametros de salida:
+*          - sk1 : resultado final. 
+*/
 
 double exp_t(double x)
 {
-
-    /**
-    * Aproximacion de la funciones exponencial de base e 
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion cos
-    * 
-    * Parametros de salida:
-    *          - sk1 : resultado final. 
-    */
 
 
     int n = 2;
     long double sk = 1; //Se define el valor inicial de sk
     long double sk1 = sk + x; //Se define el valor inicial de sk+1
     int k = 1;
-
+    double error = tol + 1;
     
-    while (fabsl(sk1 - sk) >= tol && k <= iterMax )
+    while (error >= tol && k <= iterMax )
     {
         sk = sk1;
         sk1 += pow(x, n) / factorial(n); //Se calcula el nuevo valor de sk1
+        error = fabsl(sk1 - sk);
         n++;
     }
 
@@ -94,30 +155,38 @@ double exp_t(double x)
 
 //------------------------------- funcion sin(x) ------------------------------------
 
+
+
+/**
+* Aproximacion de la funcion sen
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion cos
+* 
+* Parametros de salida:
+*          - sk1 : resultado final. 
+*/
+
+
 double sin_t(double x)
 {
 
-    /**
-    * Aproximacion de la funcion sen
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion cos
-    * 
-    * Parametros de salida:
-    *          - sk1 : resultado final. 
-    */
 
-    int n = 2;
+    double n  = 2;
     double sk = x; //Se define el valor inicial de sk
     double sk1 = -1*(pow(x, 3) / factorial(3)) + sk; //Se define el valor inicial de sk+1
     int k = 1;
-    
-    while (fabsl(sk1 - sk) >= tol && k <= iterMax)
+    double error = tol + 1;
+
+
+   
+    while (error >= tol && k <= iterMax)
     {
         sk = sk1;
         int arg = 2*n + 1;
         sk1 += pow(-1,n)*(pow(x, arg) / factorial(arg));//Se calcula el nuevo valor de sk1
-        n++;
+        error = fabsl(sk1 - sk);
+        k++;
     }
 
     return sk1;   
@@ -127,31 +196,40 @@ double sin_t(double x)
 
 //------------------------------- funcion cos(x) ------------------------------------
 
+
+
+/**
+* Aproximacion de la funcion cos
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion cos
+* 
+* Parametros de salida:
+*          - sk1 : resultado final. 
+*/
+
+
+
 double cos_t(double x)
 {
 
-    /**
-    * Aproximacion de la funcion cos
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion cos
-    * 
-    * Parametros de salida:
-    *          - sk1 : resultado final. 
-    */
 
     int n = 2;
     double sk = 1; //Se define el valor inicial de sk
     double sk1 = -1*(pow(x, 2) / factorial(2)) + sk; //Se define el valor inicial de sk+1
     int k = 1;
-    
-    while (fabsl(sk1 - sk) >= tol && k <= iterMax)
+    double error = tol + 1;
+
+
+    while (error >= tol && k <= iterMax)
     {
         sk = sk1;
         int arg = 2*n;
         sk1 += pow(-1,n)*(pow(x, arg) / factorial(arg));
+        error = fabsl(sk1 - sk);
         n++;
     }
+
 
     return sk1;  
 
@@ -160,18 +238,20 @@ double cos_t(double x)
 
 //------------------------------- funcion tan(x) ------------------------------------
 
+
+/**
+* aproximacion de la funcion tangente. Se reescribe la funcion en terminos 
+* de senos y cosenos y se utilizan las funciones anteriormente implementadas
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion tangente
+* 
+* 
+* 
+*/
+
 double tan_t(double x)
 {
-    /**
-    * aproximacion de la funcion tangente. Se reescribe la funcion en terminos 
-    * de senos y cosenos y se utilizan las funciones anteriormente implementadas
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion tangente
-    * 
-    * 
-    * 
-    */
 
     return sin_t(x)/cos_t(x);
 
@@ -182,31 +262,22 @@ double tan_t(double x)
 
 //------------------------------- funcion ln(x) ------------------------------------
 
-double sk_In(double x, int n)
-{
-
-    /**
-     * aproximacion del s_k+1 para la funcion logaritmo natural 
-     */
-    double res = (2.*(x-1)/(x+1))*(1./(2*n+1)* pow(((x-1)/(x+1)), 2*n));
-    return res;
-}
+/**
+* aproximacion de la funcion logaritmo natural. Mediante la utilizacion de una serie.
+* 
+* Paramatros de entrada 
+*          - a : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
+* 
+* Parametros de salida:
+*          - sk1 : resultado final.
+* 
+* 
+*/
 
 
 double ln_t(double x)
 {
 
-    /**
-    * aproximacion de la funcion logaritmo natural. Mediante la utilizacion de una serie.
-    * 
-    * Paramatros de entrada 
-    *          - a : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
-    * 
-    * Parametros de salida:
-    *          - sk1 : resultado final.
-    * 
-    * 
-    */
 
     if (x<=0) //Verifica dominio de la funcion logaritmo
     {
@@ -219,12 +290,17 @@ double ln_t(double x)
     double sk = sk_In(x, 0); //Se define el valor inicial de sk
     double sk1 = sk_In(x, 1) + sk; //Se define el valor inicial de sk+1
     int k = 1;
+    double error = tol + 1;
+
+
     
-    while (fabsl(sk1 - sk) >= tol && k <= iterMax)//Parametros de parada 
+    while (error >= tol && k <= iterMax)//Parametros de parada 
     {
         sk = sk1;
-        sk1 += sk_In(x, n); //aproximacion del nuevo sk1
+        sk1 += (2.*(x-1)/(x+1))*(1./(2*n+1)* pow(((x-1)/(x+1)), 2*n)); //aproximacion del nuevo sk1
+        error = fabsl(sk1 - sk);
         n++; //aumenta el exponente
+
     }
 
     return sk1;  
@@ -237,19 +313,22 @@ double ln_t(double x)
 
 //------------------------------- funcion log(x) ------------------------------------
 
+
+
+/**
+* aproximacion de la funcion logaritmo utilizado la base dada por el usuario. Se reescribe 
+* la expresion en terminos de logaritmo natual para utilizar la funcion anteriormente 
+* implementada. 
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
+*          - a : base la funcion logaritmo
+* 
+*/
+
+
 double log_t(int x, int a)
 {
-
-    /**
-    * aproximacion de la funcion logaritmo utilizado la base dada por el usuario. Se reescribe 
-    * la expresion en terminos de logaritmo natual para utilizar la funcion anteriormente 
-    * implementada. 
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
-    *          - a : base la funcion logaritmo
-    * 
-    */
 
     if (x <= 0) //Se verifica que x sea estrictamente mayor que cero para que cumpla el dominio de la funcion 
     {
@@ -274,19 +353,20 @@ double log_t(int x, int a)
 
 //------------------------------- funcion exponencial base a ------------------------------------
 
+/**
+* aproximacion de la funcion exponencial utilizado la base dada por el usuario. Se reescribe 
+* la expresion en terminos de una funcion exponencial de base e para utilizar la funcion anteriormente 
+* implementada. 
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
+*          - a : base la funcion logaritmo
+* 
+*/
+
 double power_t(double x, double a)
 {
 
-    /**
-    * aproximacion de la funcion exponencial utilizado la base dada por el usuario. Se reescribe 
-    * la expresion en terminos de una funcion exponencial de base e para utilizar la funcion anteriormente 
-    * implementada. 
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
-    *          - a : base la funcion logaritmo
-    * 
-    */
 
     double m = ln_t(a);
     double exp = exp_t(m*x);
@@ -299,18 +379,36 @@ double power_t(double x, double a)
 
 //------------------------------- funcion asin(x) -------------------------------------------
 
+
+/**
+* aproximacion de la funcion  utilizado la base dada por el usuario. Se reescribe 
+* la expresion en terminos de logaritmo natual para utilizar la funcion anteriormente 
+* implementada. 
+* 
+* Paramatros de entrada 
+*          - a : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
+* 
+*/
+
 double asin_t(double x)
 {
-    /**
-    * aproximacion de la funcion  utilizado la base dada por el usuario. Se reescribe 
-    * la expresion en terminos de logaritmo natual para utilizar la funcion anteriormente 
-    * implementada. 
-    * 
-    * Paramatros de entrada 
-    *          - a : argumento de la funcion logaritmo, debe estrictamente mayor que cero 
-    * 
-    */
-    return 1./sin_t(x);
+
+    int k = 0;
+    double error = tol + 1;
+    double Sk = 0, Sk0 = 0;;
+    int n = 0;
+
+    while (error > tol && k < iterMax)
+    {
+        double fac = factorial(n);
+        Sk += (factorial(2*n)/(pow(4, n)*pow(fac, 2)*(2*n +1)))*pow(x, 2*n + 1); //Calculo del sk de la serie
+        n++;
+        k++;
+        error = fabs(Sk - Sk0); //Se calcula el error
+        Sk0 = Sk; 
+
+    }
+    return Sk;
 }
 
 
@@ -319,54 +417,62 @@ double asin_t(double x)
 //--------------------------- funcion raiz indice a ---------------------------------------
 
 
+
+/**
+* Funcion utilizada para aproximar una raiz con indice p.  
+* 
+* El criterio de la funcion es :
+*                                      x^p - a 
+*
+* donde
+*            p es el indice de la raiz 
+*            a es el argumento de la raiz
+*
+*/
+
 double f(double x, int p, int a)
 {
 
-    /**
-    * Funcion utilizada para aproximar una raiz con indice p.  
-    * 
-    * El criterio de la funcion es :
-    *                                      x^p - a 
-    *
-    * donde
-    *            p es el indice de la raiz 
-    *            a es el argumento de la raiz
-    *
-    */
+ 
     return pow(x, p) - a;
 
 }
 
+
+/**
+* Derivada de la funcion utilizada para aproximar una raiz con indice p.  
+* 
+* El criterio de la derivada de la funcion es :
+*                                                   p*x^(p-1) 
+*
+* donde
+*            p es el indice de la raiz 
+*            a es el argumento de la raiz
+*
+*/
+
 double derivate_f(double x, int p)
 {
 
-    /**
-    * Derivada de la funcion utilizada para aproximar una raiz con indice p.  
-    * 
-    * El criterio de la derivada de la funcion es :
-    *                                                   p*x^(p-1) 
-    *
-    * donde
-    *            p es el indice de la raiz 
-    *            a es el argumento de la raiz
-    *
-    */
     return p* pow(x, p -1) ;
 
 }
 
+
+
+/**
+* aproximacion de la funcion raiz con un indice dada por el usuario. Se utiliza el metodo 
+* metodo Newton-Rapshon para aproximar el cero de la funcion g(x) = x^p - a
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion raiz, debe estrictamente mayor que cero 
+*          - a : indice de la funcion raiz
+* 
+*/
+
 double root_t(int x, int a)
 {
 
-    /**
-    * aproximacion de la funcion raiz con un indice dada por el usuario. Se utiliza el metodo 
-    * metodo Newton-Rapshon para aproximar el cero de la funcion g(x) = x^p - a
-    * 
-    * Paramatros de entrada 
-    *          - x : argumento de la funcion raiz, debe estrictamente mayor que cero 
-    *          - a : indice de la funcion raiz
-    * 
-    */
 
     if (x < 0) //Se valida el dominio de la funcion 
     {
@@ -376,7 +482,7 @@ double root_t(int x, int a)
     if (a <= 0) //Se valida el indice raiz se encuentre dentro de los valores esperados
     {
         printf("El indice debe ser mayor que cero");
-        return NULL
+        return NULL;
     }
 
 
@@ -407,6 +513,16 @@ double root_t(int x, int a)
 //----------------------------- funcion raiz cuadrada --------------------------------------
 
 
+/**
+* Aproximacion de la funcion raiz con cuadrada. Se utiliza la funcion 
+* implementada para calcular una raiz de indice a. 
+* 
+* Paramatros de entrada 
+*          - x : argumento de la funcion raiz, debe estrictamente mayor que cero 
+*          - a : indice de la funcion raiz
+* 
+*/
+
 double sqrt_t(int x)
 {
 
@@ -433,11 +549,13 @@ double pi()
     double sk = 1; //Se define el valor inicial de sk
     double sk1 = -1./3 + sk; //Se define el valor inicial de sk+1
     int k = 1;
+    double error = tol + 1;
     
-    while (fabsl(sk1 - sk) >= tol && k <= iterMax)
+    while (error >= tol && k <= iterMax)
     {
         sk = sk1;
         sk1 += pow(-1, n)/(2.*n + 1); //Se calcula el nuevo valor de sk1
+        error = fabsl(sk1 - sk);
         n++;
         k++;
 
