@@ -28,7 +28,7 @@ double factorial(int x)
 
     if (x < 0) //En caso de que el argumento sea menor que cero, no existe un factorial 
     {
-        std::cout << "Argumento invalido para calcular el factorial"
+        std::cout << "Argumento invalido para calcular el factorial" << "\n";
     }
 
     else if (x == 0) //Verfica que el caso especial de factorial de 0, retorna 1
@@ -172,9 +172,9 @@ double sin_t(double x)
 {
 
 
-    double n  = 2;
-    double sk = x; //Se define el valor inicial de sk
-    double sk1 = -1*(pow(x, 3) / factorial(3)) + sk; //Se define el valor inicial de sk+1
+    double n  = 0;
+    double sk = 0; //Se define el valor inicial de sk
+    double sk1 =0; //Se define el valor inicial de sk+1
     int k = 1;
     double error = tol + 1;
 
@@ -187,6 +187,7 @@ double sin_t(double x)
         sk1 += pow(-1,n)*(pow(x, arg) / factorial(arg));//Se calcula el nuevo valor de sk1
         error = fabsl(sk1 - sk);
         k++;
+        n++;
     }
 
     return sk1;   
@@ -214,9 +215,9 @@ double cos_t(double x)
 {
 
 
-    int n = 2;
-    double sk = 1; //Se define el valor inicial de sk
-    double sk1 = -1*(pow(x, 2) / factorial(2)) + sk; //Se define el valor inicial de sk+1
+    int n = 0;
+    double sk = 0; //Se define el valor inicial de sk
+    double sk1 = 0; //Se define el valor inicial de sk+1
     int k = 1;
     double error = tol + 1;
 
@@ -227,6 +228,7 @@ double cos_t(double x)
         int arg = 2*n;
         sk1 += pow(-1,n)*(pow(x, arg) / factorial(arg));
         error = fabsl(sk1 - sk);
+        k++;
         n++;
     }
 
@@ -286,9 +288,9 @@ double ln_t(double x)
 
     }
 
-    int n = 2;
-    double sk = sk_In(x, 0); //Se define el valor inicial de sk
-    double sk1 = sk_In(x, 1) + sk; //Se define el valor inicial de sk+1
+    int n = 0;
+    double sk = 0; //Se define el valor inicial de sk
+    double sk1 = 0; //Se define el valor inicial de sk+1
     int k = 1;
     double error = tol + 1;
 
@@ -327,7 +329,7 @@ double ln_t(double x)
 */
 
 
-double log_t(int x, int a)
+double log_t(double x, double a)
 {
 
     if (x <= 0) //Se verifica que x sea estrictamente mayor que cero para que cumpla el dominio de la funcion 
@@ -430,7 +432,7 @@ double asin_t(double x)
 *
 */
 
-double f(double x, int p, int a)
+double f(double x, int p, double a)
 {
 
  
@@ -454,7 +456,7 @@ double f(double x, int p, int a)
 double derivate_f(double x, int p)
 {
 
-    return p* pow(x, p -1) ;
+    return p* pow(x, p - 1);
 
 }
 
@@ -470,10 +472,10 @@ double derivate_f(double x, int p)
 * 
 */
 
-double root_t(int x, int a)
+double root_t(double x, int a)
 {
 
-
+   
     if (x < 0) //Se valida el dominio de la funcion 
     {
         printf("El argumento de la raiz debe ser mayor o igual que cero");
@@ -545,9 +547,9 @@ double pi()
     * 
     */
 
-    int n = 2;
-    double sk = 1; //Se define el valor inicial de sk
-    double sk1 = -1./3 + sk; //Se define el valor inicial de sk+1
+    int n = 0;
+    double sk = 0; //Se define el valor inicial de sk
+    double sk1 = 0; //Se define el valor inicial de sk+1
     int k = 1;
     double error = tol + 1;
     

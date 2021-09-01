@@ -63,17 +63,17 @@ int main()
 {
 
 
-    //print_factorials();
-    double res = div_ta(5);
-    double res1 = exp_t(6);
-    double res2 = sin(75);
-    double res3 = cos(-80);
-    double res4 = tan(0.34);
+    print_factorials();
+    double res = div_ta(170);
+    double res1 = exp_t(-1);
+    double res2 = sin_t(100);
+    double res3 = cos_t(-10);
+    double res4 = tan_t(0.34);
     double res5 = ln_t(98);
     double res6 = log_t(75,3);
-    double res7 = power_t(2, 8);
+    double res7 = power_t(0.8,3);
     double res8 = pi();
-    double res9 = sqrt_t(6);
+    double res9 = sqrt_t(2);
     double res10 = root_t(6,3);
     double res11 = asin_t(0.23);
 
@@ -89,5 +89,34 @@ int main()
     std::cout << "sqrt "<<res9 << '\n';
     std::cout << "root "<<res10 << '\n';
     std::cout << "asin "<<res11 << '\n';
+
+
+
+   double r1 = sin_t(3./7) + ln_t(2); 
+   std::cout << r1  << "\n";
+
+
+
+   double r11 = root_t(r1, 3);
+   std::cout << r11  << "\n";
+
+
+
+   double r2 = cos_t(res9);
+   std::cout << r2  << "\n";
+
+
+
+   double pi_ = pi();
+   std::cout << pi_  << "\n";
+
+
+
+   double r3 = log_t(res1, pi_);
+   std::cout << r3  << "\n";
+
+
+   double final = (r11 / r2) + r3;
+   std::cout << final << "\n";
  
 }
