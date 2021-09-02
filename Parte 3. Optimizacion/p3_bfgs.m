@@ -55,6 +55,9 @@ function [xk error]= newton_raphson(f, tol, iterMax)
     n = length(xk);
     lambda = 1;
     sigma1 = 0.5;
+    rho = 2;
+    alpha = 2;
+    epsilon =2;
     Bk = eye(n,n);
     pk = 0;
    
@@ -70,7 +73,7 @@ function [xk error]= newton_raphson(f, tol, iterMax)
       f_izq = double(subs(f, variables, xk + lambda*pk));
       f_der = double(subs(f, variables, xk) + sigma1*lambda*transpose(gk)*pk);
       
-      rho = 2;
+      
       i = 0;
       while(f_izq <= f_der)
       
@@ -88,8 +91,11 @@ function [xk error]= newton_raphson(f, tol, iterMax)
       sk_t = double(transpose(sk));
       yk_t = double(transpose(yk));
   
-      cond = double(yk_t * sk);
-      if (cond > 0)
+      izq = double(yk_t * sk) / double(norm(sk))^2;
+      der = alpha*(double(norm(subs(g, variables, xk))))^epsilon;
+      
+      
+      if (izq >= der)
         Bk = double(Bk - (Bk*sk*sk_t*Bk)/(sk_t*Bk*sk) + (yk*yk_t)/(yk_t*sk));
       endif
       
