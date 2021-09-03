@@ -10,11 +10,11 @@ function ejemplo_newton_raphson()
   x0 = 1; %Valor inicial
   tol=10^-5; %Tolerancia
   iterMax=1000; %Numero de iteraciones maximas
-  [xk error]= newton_raphson(f, tol, iterMax)
+  [xk k error]= newton_raphson(f, tol, iterMax)
   
 end
 
-function [xk error]= newton_raphson(f, tol, iterMax)
+function [xk k error]= newton_raphson(f, tol, iterMax)
 %Esta funcion aproxima la solucion de la ecuacion f(x)=0, 
 %utilizando el metodo de la biseccion
     %
@@ -51,8 +51,16 @@ function [xk error]= newton_raphson(f, tol, iterMax)
     
     %------------------------------------------------------------------------------------
     
-    xk = [0.1; 0.1; 0.1; 0.1; 0.1];
-    n = length(xk);
+    x0 = [];
+    n = length(variables);
+    for i=1:n
+      x0 = [x0 ; randi(9)];
+      
+      
+    endfor
+    
+   
+    xk = x0;
     lambda = 1;
     sigma1 = 0.5;
     rho = 2;
@@ -75,6 +83,7 @@ function [xk error]= newton_raphson(f, tol, iterMax)
       
       
       i = 0;
+      
       while(f_izq <= f_der)
       
         lambda = rho^i;
@@ -102,19 +111,14 @@ function [xk error]= newton_raphson(f, tol, iterMax)
       xk = xk1;
       k += 1;
       error = double(norm(subs(g, variables, xk)));
-      display(error);
+      err = [err error];
+
       
-      
-      
+     
       if (error < tol)
         break;
       endif
  
-
-      
-      
-    
-    
     endwhile
 
     xk = double(xk);
