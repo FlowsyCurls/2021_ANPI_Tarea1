@@ -42,6 +42,7 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
     warning('off', 'all');
     pkg load symbolic
     syms x1 x2 x3 x4 x5;
+    v_sym = [x1 , x2, x3 ,x4, x5];
     f= matlabFunction(sym(f_str));
     n =5; 
     
@@ -50,14 +51,14 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
     %Se declaran las constantes
     sigma1 = 0.4;
     rho = 0.8;
-    alpha = 0.2;
-    epsilon = 0.7;
+    alpha = 0.7;
+    epsilon = 0.2;
     lambda = 1;
     
     
     %Se inicializa el vector x0
     x0 = [];
-    for i=1:5
+    for i=1:n
       x0 = [x0 randi(10)];
     endfor
     
@@ -66,7 +67,7 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
     
     
     %Se calcula el gradiente
-    g = gradient(sym(f_str), [x1, x2, x3, x4, x5]);
+    g = gradient(sym(f_str), v_sym);
     g_n = matlabFunction(g);
     gk = g_n(x0(1), x0(2), x0(3), x0(4), x0(5));
     
@@ -92,7 +93,7 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
         lambda = rho^i;
         f_izq = f(xk(1)+lambda*pk(1), xk(2)+lambda*pk(2), xk(3)+lambda*pk(3), xk(4)+lambda*pk(4), xk(5)+lambda*pk(5));
         f_der = f(xk(1), xk(2), xk(3), xk(4), xk(5)) + sigma1*lambda*transpose(gk)*pk;
-        i = i + 1;
+        i = i+1;
         
         %Se detiene cuando se cumple la condición f(xk + lambda*pk) <= f(xk) + sigma*lambda*gk'*pk
         if (f_izq <= f_der) 
@@ -122,10 +123,10 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
       
       %Se calcula la condiciones que debe cumplirse para actualizar Bk 
       izq = (yk_t * sk) / norm(sk)^2;
-      der = epsilon*(norm(gk))^alpha;
+      der = alpha*(norm(gk))^epsilon;
       
-      if (izq >= der)
-        Bk = Bk - (Bk*sk*sk_t*Bk)/(sk_t*Bk*sk) + (yk*yk_t)/(yk_t*sk);
+      if (izq >= der) %Se verifica la condicion de actualizacion de Bk
+        Bk = Bk - (Bk*sk*sk_t*Bk)/(sk_t*Bk*sk) + (yk*yk_t)/(yk_t*sk); %Se actualiza Bk
       endif
     
     
@@ -135,7 +136,8 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
       err = [err error];
     
     
-      if (error < tol)
+      %Se verifica el punto de parada donde el error debe ser menor que la tolerancia
+      if (error < tol)  
              break;
       endif
        
@@ -150,11 +152,5 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
   xlabel('Grado del Polinomio (k)')
   ylabel('Error Relativo')
     
-    
- 
-
-  
-
-
 end
   

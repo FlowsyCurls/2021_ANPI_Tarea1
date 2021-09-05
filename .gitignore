@@ -2,6 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,c++,octave
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,c++,octave
 
+.vscode
 .DS_Store
 ### C++ ###
 # Prerequisites
