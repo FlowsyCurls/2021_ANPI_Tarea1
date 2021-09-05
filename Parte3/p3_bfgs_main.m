@@ -20,17 +20,16 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
     %Esta funcion aproxima la solucion de la ecuacion f(x)=0, 
 %utilizando el metodo de la biseccion
     %
-    %Sintaxis:  [xk k error]= newton_raphson(f, x0, tol, iterMax)
+    %Sintaxis:  [xk k error]= bgs(f, tol, iterMax)
     % 
     %Parametros Iniciales: 
     %            f = una  cadena de caracteres (string) que representa a la funcion f
-    %            x0 = valor inicial 
     %            tol = un numero positivo que representa a la tolerancia para el criterio |f(xk)|<tol
     %            iterMax = cantidad de iteraciones maximas
     %            
     %Parametros de Salida:                           
     %            xk = aproximacion del cero de la funcion f
-    %            k = numero de iteraciones realizados
+    %            iter = numero de iteraciones realizados
     %            error =  |f(xk)|
     %%%% Se debe instalar el paquete Symbolic
     %%%% Paso 1: Descargar el archivo symbolic-win-py-bundle-2.9.0.tar.gz

@@ -54,7 +54,7 @@ function [xk k error]= newton_raphson(f, tol, iterMax)
     x0 = [];
     n = length(variables);
     for i=1:n
-      x0 = [x0 ; randi(9)];
+      x0 = [x0 ; 0.1];
       
       
     endfor
@@ -63,7 +63,7 @@ function [xk k error]= newton_raphson(f, tol, iterMax)
     xk = x0;
     lambda = 1;
     sigma1 = 0.5;
-    rho = 2;
+    rho = 0.5;
     alpha = 2;
     epsilon =2;
     Bk = eye(n,n);
@@ -112,6 +112,7 @@ function [xk k error]= newton_raphson(f, tol, iterMax)
       k += 1;
       error = double(norm(subs(g, variables, xk)));
       err = [err error];
+      display(error);
 
       
      
