@@ -48,29 +48,14 @@ def newton_H_m2(fun,x0,tol,iterMax, beta):
 
 
 
-r = 10
-alpha = 4
-db = 4
-Y = 1 
-x1 = 7
-x2 = 6
-pi = 3.14
-
-
+##DEFINICION DE LA FUNCION DE DISTANCIA ENTRE DOS SENSORES
 g = '200*acos(d / 20) - d*root(100 - (d**2)/4, 2)'
-f_ = f"log({x1} / d , 10)*1600/(16*log(10)) + (d*({x2} - d))/ (((({g})**2)*(log(10)**2) / 3200 )*(1/ ({g}) + 1/314.15))"
-
-
-f = '(log( 7 / d, 10) * 1600)/(16*log(10)) +  (d*(6 - d)) /  ((((200*acos(d / 20) - d*root(100 - (d**2)/4, 2))**2)/((2*(40/log(10))**2))) * ( 1/((200*acos(d / 20) - d*root(100 - (d**2)/4, 2))) + 1/314.15 )  )  '
-
+f = f"log(7 / d , 10)*1600/(16*log(10)) + (d*(6 - d))/ (((({g})**2)*(log(10)**2) / 3200 )*(1/ ({g}) + 1/314.15))"
 
 f_sym = f1 = sp.sympify(f)
-
-print(f_sym)
-x0 = 0.1
+x0 = 0.5
 tol = 10**-5
 iterMax = 100
-beta = 0.1
-
+beta = 0.5
 y = newton_H_m2(f_sym, x0,tol, iterMax, beta)
-print(y)
+print(f"La aproximacion esta dado por {y[0]} con un error de {y[2]}")

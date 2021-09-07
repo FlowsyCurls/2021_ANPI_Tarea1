@@ -11,7 +11,7 @@ iterMax=500             # Iteraciones Maximas
 beta=10                 # Beta
 
 # Parte 5, pruebas.
-f1='cos(x)-x'
+#f1='cos(x)-x'
 f2='sin(x)^2-x^2+1'
 # f3='x*e**(x**2)-sin(x)**2+3*cos(x)+5'
 
@@ -33,6 +33,7 @@ def main():
 
 def prt(arry):
     if len(arry) == 3:
+        print('     • funcion :',f2)
         print('     • xk  :',arry[0])
         print('     • k   :',arry[1])
         print('     • err :',arry[2])
