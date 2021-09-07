@@ -58,4 +58,4 @@ tol = 10**-5
 iterMax = 100
 beta = 0.5
 y = newton_H_m2(f_sym, x0,tol, iterMax, beta)
-print(f"La aproximacion esta dado por {y[0]} con un error de {y[2]}")
+print(f"La aproximacion de la distancia d esta dada por {y[0]} con un error de {y[2]}")

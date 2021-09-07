@@ -1,16 +1,16 @@
-function p3_bfgs_main()
+function p3_bfgs()
   clc; clear; 
-  %Se escogio la funcion Sphere Function como funcion de prueba
-  f= " x1^2 + x2^2 + x3^2 + x4^2 + x5^2";
-  x0 = 1; %Valor inicial
+  %Funcion del problema de ingeneria aplicado
+  f="4*x^2+30*x+4*y^2-40*y+2375";
+  x0 = [-0.0003 100000];
   tol=10^-5; %Tolerancia
   iterMax=1000; %Numero de iteraciones maximas
-  [xk iter error]= bfgs(f, tol, iterMax)
+  [xk iter error]= bfgs(f, x0, tol, iterMax)
   
 end
 
 
-function [xk iter error] = bfgs(f_str, tol, iterMax)
+function [xk iter error] = bfgs(f_str, x0, tol, iterMax)
     %
     % FUncion que aproxima el minimo de una funcion dada utilizando el metodo 
     % BFGS
@@ -37,10 +37,10 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
     %%% Cargar el paquete symbolic
     warning('off', 'all');
     pkg load symbolic
-    syms x1 x2 x3 x4 x5;
-    v_sym = [x1 , x2, x3 ,x4, x5];
+    syms x y;
+    v_sym = [x y];
     f= matlabFunction(sym(f_str));
-    n =5; 
+    n =length(x0); 
     
     
     
@@ -52,20 +52,15 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
     lambda = 1;
     
     
-    %Se inicializa el vector x0 con numeros random
-    x0 = [];
-    for i=1:n
-      x0 = [x0 randi(10)];
-    endfor
-    
-    
+
+  
     Bk = eye(n,n); %Se inicializa la matrix Bk como una matriz identidad 
     
     
     %Se calcula el gradiente
     g = gradient(sym(f_str), v_sym);
     g_n = matlabFunction(g);
-    gk = g_n(x0(1), x0(2), x0(3), x0(4), x0(5));
+    gk = g_n(x0(1), x0(2));
     
     
     %Se inicializa el vector xk
@@ -87,8 +82,8 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
       for (k=0:iterMax)
         %Se calcula el nuevo valor de lambda
         lambda = rho^i;
-        f_izq = f(xk(1)+lambda*pk(1), xk(2)+lambda*pk(2), xk(3)+lambda*pk(3), xk(4)+lambda*pk(4), xk(5)+lambda*pk(5));
-        f_der = f(xk(1), xk(2), xk(3), xk(4), xk(5)) + sigma1*lambda*transpose(gk)*pk;
+        f_izq = f(xk(1)+lambda*pk(1), xk(2)+lambda*pk(2));
+        f_der = f(xk(1), xk(2)) + sigma1*lambda*transpose(gk)*pk;
         i = i+1;
         
         %Se detiene cuando se cumple la condición f(xk + lambda*pk) <= f(xk) + sigma*lambda*gk'*pk
@@ -105,7 +100,7 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
       xk = xk + lambda*pk; %Se calcula el nuevo valor de xk
      
       gk_1 = gk;  
-      gk = g_n(xk(1), xk(2), xk(3), xk(4), xk(5)); %Se calcula el nuevo valor de gk
+      gk = g_n(xk(1), xk(2)); %Se calcula el nuevo valor de gk
     
     
       %Se calcula los valores de sk, yk y sus respectivas transpuestas
@@ -144,9 +139,9 @@ function [xk iter error] = bfgs(f_str, tol, iterMax)
   
   %Graficacion
   plot(0:length(err)-1,err,'g','LineWidth',2)
-  title('Iteraciones vrs Error Relativo')
+  title('Metodo BFGS: Iteraciones vrs Error Relativo')
   xlabel('Iteraciones (iter)')
-  ylabel('Error Relativo')
+  ylabel('Error Relativo (|g(xk)|)')
     
 end
   

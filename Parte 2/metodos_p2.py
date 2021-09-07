@@ -178,7 +178,7 @@ def newton_G_m1(fun,x0,tol,iterMax):
             break
 
         w = (f*df2)/df1**2                      # w(x) = f(x)*f’’(x)/f’(x)^2 : obtenido del paper.
-        xk = xk - (2/2-w) * f/df1
+        xk = xk - (2/(2-w)) * f/df1
 
         error = abs(evaluate(fun,'x',xk))
         er.append(error)
